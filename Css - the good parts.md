@@ -112,7 +112,7 @@ Podczas tworzenia kodu HTML, nie używaj inlinowego css.
 ## Stylowanie za pomocą JS lub jQuery
 Część efektów na stronie, można uzyskać jedynie za pomocą JS. Przykładowo, za pomocą jQuery, możesz wykonać taki kod:
 
-```css
+```js
 /* no no no */
     $(".myElem").css("color", "red");
     $(".myElem").css("width", "1000px")
