@@ -33,26 +33,27 @@ Aby wprowadzić modyfikację, dodaj dodatkową klasę - modyfikator.
 
 ```css
 .container {
-        width: 500px !important; // cała reszta strony psuje się
+    width: 500px !important; /* cała reszta strony psuje się, domyślny container bootstrapa stał się nieprzewidywalny */
 }
 ```
 
-Aby zmniejszyć szerokość strony, dodaj osobną klasę.
+Aby zmniejszyć szerokość strony, dodaj osobną klasę - modyfikator
 
 ```css
 .container-smaller {
-        width: 500px; // nadal paskudnie, ale trochę lepiej
+    width: 500px; /* nadal paskudnie, ale trochę lepiej */
 }
 ```
 
-### Używanie important
-Kod nadziany !importantami jak dobra kasza skwarkami, jest zwykle pisany przez osoby, które nie rozumieją zasad kaskadowości stylów CSS. Jeśli nie musisz, nie używaj znacznika important!.
+## Używanie important
+Jeśli nie musisz, nie używaj znacznika important!.
 Przed zastosowaniem !important, sprawdź specyficzność danego elementu i pomyśl, jak ją nadpisać. 
+
 Używając important, działasz krótkowzrocznie i nadajesz elementowi styl, który będzie bardzo trudno zmienić. W przyszłości, gdy kod CSS się zmieni, sprawi to problemy.
-Important jest wykorzystywany przez twórców pluginów czy szablonów CSS, chcących mieć pewność, że ich styl zostanie nadany. 
+Important jest wykorzystywany przez twórców pluginów czy szablonów CSS, chcących mieć pewność, że ich styl zostanie nadany.
 
 
-#### Jak działa important? 
+### Jak działa important? 
 Important zwiększa specyficzność w taki sposób, że nie można nadpisać elementu w inny sposób, jak tylko przez używanie jeszcze bardziej specyficznego stylu (także zawierającego !important). 
 
 Jeśli musisz nadpisywać style z użyciem !important, pomyśl o przekształceniu kodu w taki sposób, by uniknąć stosowania tej deklaracji. 
@@ -73,7 +74,7 @@ Przykład - chcesz, aby input na stronie oznaczony określonym id, miał większ
 Przykład
 ```css
 header {
-        font-size: 50px;
+    font-size: 50px;
 }
 ```
 
@@ -83,13 +84,13 @@ header {
 }
 ```
 
-### Stylowanie inline - bardzo trudno jest je potem nadpisać
+## Stylowanie inline - bardzo trudno jest je potem nadpisać
 Stylowanie inline może przybierać dwie, bardzo kłopotliwe formy. 
 Po pierwsze, style inline są nadawane przez kod Javascriptu. 
 Drugim sposobem jest wpisanie ich “na sztywno” w element, w celu jego wystylowania. Jedna i druga metoda, powoduje problemy z późniejszym utrzymaniem kodu. 
 
 
-Style inline są stosowane dlatego, że dają natychmiastowe efekty i oszczędzają nam wysiłku umysłowego, przy wybieraniu elementów CSS za pomocą selektorów. Niestety, ale z czasem, musisz coraz dłużej zastanawiać się nad tym, jak nadpisać takie style.
+Style inline są stosowane dlatego, że dają natychmiastowe efekty i oszczędzają nam wysiłku umysłowego, przy wybieraniu elementów CSS za pomocą selektorów. Niestety, ale z czasem, musisz coraz dłużej zastanawiać się nad tym, jak nadpisać takie style. Czasem jest to niemożliwe.
 
 
 Jeszcze jedną wadą stylów inline jest to, że nie pozwalają one na wielokrotne wykorzystywanie kodu.
@@ -106,7 +107,43 @@ Metodologia Atomic CSS zaleca stosowanie takich klas, jak
 
 W praktyce, wykorzystanie takiego kodu, nie różni się niczym od stylowania inlinowego i należy go unikać!
 
-### Stylowanie za pomocą JS
+Podczas tworzenia kodu HTML, nie używaj inlinowego css.
+
+## Stylowanie za pomocą JS lub jQuery
+Część efektów na stronie, można uzyskać jedynie za pomocą JS. Przykładowo, za pomocą jQuery, możesz wykonać taki kod:
+
+```css
+/* no no no */
+    $(".myElem").css("color", "red");
+    $(".myElem").css("width", "1000px")
+```
+
+Uzyskasz dzięki niemu oczekiwany efekt, jednak styl zostanie dodany inline, co jest złym rozwiązaniem. Znacznie lepiej, jest stworzyć w CSS odpowiednią klasę
+
+```css
+.myClass {
+    color: red;
+    width: 1000px;
+}
+
+```
+, którą dodasz za pomocą JS.
+
+```js
+$(".myElem").addClass(".myClass")
+```
+
+Jeszcze lepszym rozwiązaniem, jest oznaczenie klasy CSS przyrostkiem, który wskaże, że jest ona dodawana za pomocą JS.
+
+```css
+.js-myClass {
+    color: red;
+    width: 1000px;
+}
+
+```
+Dzięki temu, oszczędzisz sobie poszukiwań tej klasy w kodzie HTML.
+
 ### Stosowanie za mało ogólnych selektorów, gdy można skorzystać z ich ogólniejszej wersji
 Kod początkujących deweloperów często zyskuje na jakości, po usunięciu wielu wartości niepotrzebnie wpisanych w bardzo szczegółowo określone elementy. Praktyka podpowiada, że zanim napiszemy zbyt szczegółowy selektor CSS, powinniśmy przejrzeć inne elementy strony i prawdopodobnie, skorzystać z wartości już zdefiniowanych w kodzie.
 Przykłady
