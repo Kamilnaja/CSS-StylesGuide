@@ -319,7 +319,7 @@ Jeśli będziemy stosowali własne media queries, ocena poprawności zachowania 
 
 Konieczność stosowania wielu własnych media queries, może wskazywać na to, że stylujemy coś w zły sposób. Przykładowo, jeśli musisz zmieniać margines elementu w pikselach, być może powinieneś spróbować zabawy z wartościami procentowymi lub wyśrodkowania elementu.
 
-## Nadmierne zagnieżdżanie selektorów
+### Nadmierne zagnieżdżanie selektorów
 Ten problem wiąże się z niepohamowaną rządzą deweloperów, do nadawania tego samego stylu wielu elementom na stronie, z użyciem osobnych selektorów, co omówiłem wcześniej. 
 
 Jeśli twój selektor wygląda tak: :metal:
@@ -335,14 +335,29 @@ Warto na to zwracać szczególną uwagę, podczas korzystania z preprocesorów C
 Mniejsza ilość zagnieżdżeń w kodzie, to także szybsze działanie przeglądarki użytkownika, ponieważ ma ona do przeparsowania, mniejszą ilość selektorów. 
 Zapoznaj się z pseudoselektorami CSS, ponieważ pozwalają one na bardziej eleganckie stylowanie. 
 
-## Osobne stylowanie elementów w jednej grupie (kilka margin top, zamiast jednego dla wrapa)
+### Osobne stylowanie elementów w jednej grupie (kilka margin top, zamiast jednego dla wrapa)
 ```html
 <div class="wrap">
     <p>Name</p>
     <button>click</button>
 </div>
 ```
-## Stylowanie, gdy markup html jest do poprawy
+
+```css 
+/* nu nu nu, przy przesuwaniu w pionie, trzeba zmienić 2 wartości */
+p {
+    margin-top: 20px;
+}
+buttom {
+    margin-top: 20px;
+}
+
+/* lepiej */
+.wrap {
+    margin-top: 20px;
+}
+```
+### Stylowanie, gdy markup html jest do poprawy
 
 Przykładowo, w kodzie znajdują się dwa elementy, mające służyć jako linie, oddzielające poszczególne elementy. Mają one mieć taką samą długość.
 ```html
@@ -355,7 +370,9 @@ Przykładowo, w kodzie znajdują się dwa elementy, mające służyć jako linie
     <hr>
 </div>
 ```
-Gdy klasa .row, nadaje elementom dodatkowy margines, padding lub długość, uzyskanie prawidłowej struktury html, będzie wymagało kombinowania. Lepiej jest najpierw naprawić strukturę HTML (o ile można). Ostylowanie tych dwóch elementów, zajmie wtedy znacznie mniej czasu. 
+Gdy klasa .row, nadaje elementom dodatkowy margines, padding lub długość, uzyskanie prawidłowej struktury html, będzie wymagało kombinowania. 
+
+Lepiej jest najpierw naprawić strukturę HTML (o ile można). Ostylowanie tych dwóch elementów, zajmie wtedy znacznie mniej czasu. 
 
 
 ## Błędy ogólne, związane z tworzeniem strony
@@ -390,9 +407,9 @@ Wymyślanie koła na nowo, często zamienia się w "wymyślanie na nowo kwadrato
 
 ### Tworzenie designu pixel perfect z myślą tylko o swoim ekranie.
 Klient może czasem wymagać, by tekst na stronie był ułożony idealnie tak samo, jak w dokumencie Worda lub pliku graficznym. Nie ma to sensu z kilku powodów:
-* Na monitorze o innej rozdzielczości, tekst wyświetli się w zupełnie inny sposób. Jeśli dodałeś w tekście znaczniki <br>, by wymusić łamanie linii, znaczniki będą powodowały błędne łamanie linii na innych rozdzielczościach. Przypomina to formatowanie tekstu w Wordzie, za pomocą enterów wstawianych na końcu każdej linii - to bardzo zła praktyka. 
+* Na monitorze o innej rozdzielczości, tekst wyświetli się w zupełnie inny sposób. Jeśli dodałeś w tekście znaczniki ```br```, by wymusić łamanie linii, znaczniki będą powodowały błędne łamanie linii na innych rozdzielczościach. Przypomina to formatowanie tekstu w Wordzie, za pomocą enterów wstawianych na końcu każdej linii - to bardzo zła praktyka. 
 * Tekst na stronie nigdy nie jest renderowany identycznie, jak w innym narzędziu. 
-* Zawartość strony będzie się zmieniała
+* Zawartość strony będzie się zmieniała. Dodanie większej ilości tekstu, lub zmiana innego elementu na stronie, spowoduje inne ułożenie pieczołowicie ustawianej treści.
 
 Ta zasada dotyczy się także innych elementów strony, jak na przykład marginesów mierzonych w pikselach czy wymiarów poszczególnych divów. Na stronie można zastosować na przykład paddingi o stałej szerokości w pikselach. Określanie w ten sposób wysokości lub szerokości dynamicznych elementów, może nie mieć sensu. 
 
@@ -435,6 +452,8 @@ Przykłady źle nazwanych klas
 .tekst-example {} /* wszystkie elementy tej klasy, mają mieć podobne stylowanie
 ```
 
+Dobrym rozwiązaniem w projekcie, może być zastosowanie się do powszechnie znanej konwencji tworzenia kodu, takiej, jak na przykład BEM.
+
 ### Ogólny bałagan w arkuszach stylów
 
 Arkusze CSS potrafią się bardzo szybko rozrastać, co prowadzi do sytuacji, w której coraz trudniej jest dodawać lub zmieniać konkretne wartości. Wzrost złożoności kodu, to jeden z najgorszych wrogów programisty, dlatego powinieneś konsekwentnie dbać o porządek w arkuszach. 
@@ -462,8 +481,5 @@ Kod trzymający się konwencji, ułatwia pracę programiście. Dzięki niemu, od
 
 Aby ułatwić to zadanie, najlepiej jest włączyć automatyczne reformatowanie kodu przy zapisie pliku w edytorze. Ustawienia dotyczące formatowania, warto współdzielić w zespole. Konwencja dotycząca formatowaia może być ustalona przez zespół. Częstym wyborem jest zastosowanie się do jednej z konwencji stosowanych przez duże firmy, a dostępnej w Internecie.
 
-### Brak myślenia o dynamicznym zachowaniu strony
-        * Gdy dodamy więcej treści
-        * Gdy zmieni się rozdzielczość strony 
-        * inne rozwiązania "ad hoc"
+### Rozwiązania ad hoc
 
