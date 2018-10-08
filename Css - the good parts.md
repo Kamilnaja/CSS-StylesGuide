@@ -30,7 +30,9 @@ Ten poradnik, pozwoli Ci się uchronić przed problemami, narastającymi wraz ze
 
 Poniżej omawiam nieprawidłowe praktyki, które często pojawiają sie w projektach.
 
-## Nadpisywanie stylów frameworka!
+## Błedy w kodzie
+
+### Nadpisywanie stylów frameworka!
 Gdy nadpiszesz domyślne klasy frameworka CSS, przestanie się on zachowywać tak, jak chciał to autor oraz jak tego spodziewają się deweloperzy.
 
 Prowadzi to do problemów, przy rozwoju aplikacji lub strony internetowej. Tracisz pewność, jakich klas CSS możesz używać w określnej sytuacji.
@@ -54,7 +56,7 @@ Aby zmniejszyć szerokość strony, dodaj osobną klasę - modyfikator
 }
 ```
 
-## Używanie important
+### Używanie important
 Jeśli nie musisz, nie używaj znacznika important!.
 
 Używając important, działasz krótkowzrocznie i nadajesz elementowi styl, który będzie bardzo trudno zmienić. W przyszłości, gdy kod i wymagania klienta zmienią się, sprawi to problemy.
@@ -71,13 +73,13 @@ W takiej sytuacji, warto najpierw poprawić poprzedni kod, usuwając !important 
 
 Important jest wykorzystywany przez twórców pluginów czy szablonów CSS, chcących mieć pewność, że ich styl zostanie nadany. Utrudnia to pracę przy zmianie wyglądu tych elementów, zwłaszcza, że nie powinniśmy ingerować w kod bibliotek.
 
-### Jak działa important? 
+#### Jak działa important? 
 Important zwiększa specyficzność w taki sposób, że nie można nadpisać elementu w inny sposób, jak tylko przez używanie jeszcze bardziej specyficznego stylu (także zawierającego !important). Element ostylowany z użyciem !important, otrzymuje ogromnego "bonusa" do specyficzności.
 
 https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity
 
 
-## Stylowanie po tagach
+### Stylowanie po tagach
 Struktura kodu HTML strony może się w pewnych przypadkach zmienić, dlatego lepiej jest używać reużywalnych klas. 
 
 Przykład
@@ -115,8 +117,7 @@ header {
 }
 ```
 
-
-## Stylowanie po Id
+### Stylowanie po Id
 Element z danym id może znajdować się na stronie tylko raz, a jeśli znajduje się na stronie więcej razy, może powodować to nieoczekiwane działanie na przykład JS. Również doświadczony programista będzie zaskoczony, gdy znajdzie kilka elementów z tym samym id na jednej stronie.
  
 Tworząc stronę internetową, staraj się komponować ją z reużywalnych elementów, które będzie można wykorzystać na wielu podstronach. Wyklucza to używanie stylowania za pomocą id. 
@@ -138,7 +139,7 @@ Przykład
 
 W praktyce, osobne stylowanie jakiegoś elementu, często okazuje się błędne, ponieważ jest on jednym z wielu podobnych elementów. Pamiętając o tej zasadzie, oszczędzisz sobie pisania powtarzalnego kodu, oraz jego późniejszego usuwania przy refaktoryzacji.
 
-## Stylowanie inline - bardzo trudno jest je potem nadpisać
+### Stylowanie inline - bardzo trudno jest je potem nadpisać
 Stylowanie inline może przybierać dwie, bardzo kłopotliwe formy. 
 Po pierwsze, style inline są nadawane przez kod Javascriptu. 
 Drugim sposobem jest wpisanie ich “na sztywno” w element, w celu jego wystylowania. Jedna i druga metoda, powoduje problemy z późniejszym utrzymaniem kodu. 
@@ -166,7 +167,7 @@ W praktyce, wykorzystanie takiego kodu, nie różni się niczym od stylowania in
 
 Podczas tworzenia kodu HTML, nie używaj inlinowego css. To jedna z najważniejszych zasad dotyczących CSS. Bezlitośnie eliminuj inlinowy kod ze struktury HTML.
 
-## Stylowanie za pomocą JS lub jQuery
+### Stylowanie za pomocą JS lub jQuery
 Część efektów na stronie, można uzyskać jedynie za pomocą JS. Przykładowo, za pomocą jQuery, możesz wykonać taki kod:
 
 ```js
@@ -256,7 +257,7 @@ h2 {
 Podobna zasada dotyczy większości selektorów CSS używanych na stronie, takich, jak font-size, line-height, color itd. Powinieneś dążyć do tworzenia kodu, który można wykorzystać także w innych miejscach aplikacji.
 
 
-## Używanie magicznych wartości
+### Używanie magicznych wartości
 Magiczne wartości to liczby biorące się niewiadomo skąd. Ich charakterystyczną cechą jest to, że nie sprawdzają się w pewnych warunkach, takich, jak wyświetlenie strony na innym urządzeniu niż przewidział to deweloper.
 
 Przed nadaniem elementowi określonej wysokości, szerokości czy marginesu, pomyśl, czy w przyszłości się on nie zmieni. Praktyka pokazuje, że ustawienie jakiejś wartości na sztywno, niemal zawsze powoduje kolejne problemy w przyszłości.
@@ -318,8 +319,48 @@ Jeśli będziemy stosowali własne media queries, ocena poprawności zachowania 
 
 Konieczność stosowania wielu własnych media queries, może wskazywać na to, że stylujemy coś w zły sposób. Przykładowo, jeśli musisz zmieniać margines elementu w pikselach, być może powinieneś spróbować zabawy z wartościami procentowymi lub wyśrodkowania elementu.
 
+## Nadmierne zagnieżdżanie selektorów
+Ten problem wiąże się z niepohamowaną rządzą deweloperów, do nadawania tego samego stylu wielu elementom na stronie, z użyciem osobnych selektorów, co omówiłem wcześniej. 
 
-## Wymyślanie koła na nowo, czyli stosowanie własnych rozwiązań, gdy mamy już gotowe we frameworku lub istniejącym kodzie.
+Jeśli twój selektor wygląda tak: :metal:
+```css
+div.post-body.view.view--loaded > div.post-body__body > div > p:nth-child(35) { 
+        color: red;
+}
+```
+
+to każda zmiana w HTML, sprawi, że przestanie on działać. Selektory nie powinny być zagnieżdżone bardziej niż do 2 - 3 elementów, a jeśli jest ich więcej, znacznie rośnie wysiłek związany ze zrozumieniem kodu.
+
+Warto na to zwracać szczególną uwagę, podczas korzystania z preprocesorów CSS, które ułatwiają tworzenie zagnieżdżeń.
+Mniejsza ilość zagnieżdżeń w kodzie, to także szybsze działanie przeglądarki użytkownika, ponieważ ma ona do przeparsowania, mniejszą ilość selektorów. 
+Zapoznaj się z pseudoselektorami CSS, ponieważ pozwalają one na bardziej eleganckie stylowanie. 
+
+## Osobne stylowanie elementów w jednej grupie (kilka margin top, zamiast jednego dla wrapa)
+```html
+<div class="wrap">
+    <p>Name</p>
+    <button>click</button>
+</div>
+```
+## Stylowanie, gdy markup html jest do poprawy
+
+Przykładowo, w kodzie znajdują się dwa elementy, mające służyć jako linie, oddzielające poszczególne elementy. Mają one mieć taką samą długość.
+```html
+<div class="row">
+    <hr>
+</div>
+
+<!-- drugi element -->
+<div>
+    <hr>
+</div>
+```
+Gdy klasa .row, nadaje elementom dodatkowy margines, padding lub długość, uzyskanie prawidłowej struktury html, będzie wymagało kombinowania. Lepiej jest najpierw naprawić strukturę HTML (o ile można). Ostylowanie tych dwóch elementów, zajmie wtedy znacznie mniej czasu. 
+
+
+## Błędy ogólne, związane z tworzeniem strony
+
+### Wymyślanie koła na nowo, czyli stosowanie własnych rozwiązań, gdy mamy już gotowe we frameworku lub istniejącym kodzie.
 
 Przykład - tworzenie własnego okna modalnego na stronie, która używa już Bootstrapa. Stosowanie gotowych rozwiązań pozwala na szybszą pracę oraz wyeliminowanie nieoczekiwanych błędów, które pojawiają się podczas tworzenia kodu od nowa. 
 
@@ -346,23 +387,53 @@ Wymyślanie koła na nowo, często zamienia się w "wymyślanie na nowo kwadrato
 }
 ```
 
-<!-- todo - opisać nadpisywanie domyślnych wartości, które nic nie daje, na przykład typografia, wymyślne style -->
 
-### Nadmierne zagnieżdżanie selektorów
-Ten problem wiąże się z niepohamowaną rządzą deweloperów, do nadawania tego samego stylu wielu elementom na stronie, z użyciem osobnych selektorów, co omówiłem wcześniej. 
+### Tworzenie designu pixel perfect z myślą tylko o swoim ekranie.
+Klient może czasem wymagać, by tekst na stronie był ułożony idealnie tak samo, jak w dokumencie Worda lub pliku graficznym. Nie ma to sensu z kilku powodów:
+* Na monitorze o innej rozdzielczości, tekst wyświetli się w zupełnie inny sposób. Jeśli dodałeś w tekście znaczniki <br>, by wymusić łamanie linii, znaczniki będą powodowały błędne łamanie linii na innych rozdzielczościach. Przypomina to formatowanie tekstu w Wordzie, za pomocą enterów wstawianych na końcu każdej linii - to bardzo zła praktyka. 
+* Tekst na stronie nigdy nie jest renderowany identycznie, jak w innym narzędziu. 
+* Zawartość strony będzie się zmieniała
 
-Jeśli twój selektor wygląda tak:
+Ta zasada dotyczy się także innych elementów strony, jak na przykład marginesów mierzonych w pikselach czy wymiarów poszczególnych divów. Na stronie można zastosować na przykład paddingi o stałej szerokości w pikselach. Określanie w ten sposób wysokości lub szerokości dynamicznych elementów, może nie mieć sensu. 
+
+Ukończona strona musi wyglądać estetycznie i nie powinna się psuć na żadnej rozdzielczości. Elementy powinny wyświetlać się zgodnie z zamysłem projektanta. 
+
+Przykład:
+
+Tło na stronie powinno się rozciągać mniej więcej tak, jak zamierzył to grafik/designer. Pamiętaj jednak, że przy stronie responsywnej, nigdy nie osiągniesz idealnego odwzorowania z designu. Zadbaj więc o odpowiednie ustawienie wartości ...
 ```css
-div.post-body.view.view--loaded > div.post-body__body > div > p:nth-child(35) {
-        color: red;
+.my-elem{
+    background-size: {};
+    background-position:{}
 }
 ```
+...na małym, średnim i dużym ekranie. 
 
-to każda zmiana w HTML, sprawi, że przestanie on działać. Selektory nie powinny być zagnieżdżone bardziej niż do 2 - 3 elementów, a jeśli jest ich więcej, znacznie rośnie wysiłek związany ze zrozumieniem kodu.
+Niektóre osoby tworzące strony WWW, poświęcają mnóstwo czasu na to, by strona na ich ekranie wyglądała tak samo, jak design w pliku graficznym. Niestety, nie zwracają one zupełnie uwagi na to, by strona wyświetlała się przynajmniej prawidłowo, na innych rozdzielczościach. Nie popełniaj tego błędu.
 
-Warto na to zwracać szczególną uwagę, podczas korzystania z preprocesorów CSS, które ułatwiają tworzenie zagnieżdżeń.
-Mniejsza ilość zagnieżdżeń w kodzie, to także szybsze działanie przeglądarki użytkownika, ponieważ ma ona do przeparsowania, mniejszą ilość selektorów. 
-Zapoznaj się z pseudoselektorami CSS, ponieważ pozwalają one na bardziej eleganckie stylowanie. 
+### Nieprawidłowe nazewnictwo
+Bycie dobrym deweloperem, to w dużej mierze, prawidłowe nazywanie różnych rzeczy. W CSS, nazwa klasy, powinna określać ogólną rolę elementu na stronie, a <b>nie</b> dokładnie to, czym element jest lub gdzie się znajduje.
+
+Źle nazwana klasa, to prosta droga do wykonywania niepotrzebnej pracy przy pisaniu powtarzalnego kodu. 
+
+Przykłady źle nazwanych klas
+
+```css
+/* nu nu nu */
+.tekst_yellow {} /* kolor wyróżnienia tekstu może się zmienić */
+/* lepiej */
+.tekst_emphasis{}
+
+/* nu nu nu */
+.left_column {} /* na małym ekranie, może się zmienić w środkową */
+/* lepiej */
+.column {}
+
+/* źle */
+.tekst_margin-top-4px {}
+/* lepiej */
+.tekst-example {} /* wszystkie elementy tej klasy, mają mieć podobne stylowanie
+```
 
 ### Ogólny bałagan w arkuszach stylów
 
@@ -374,34 +445,25 @@ Kilka porad:
 * Zapoznaj się z metodologiami tworzenia CSS, takimi, jak BEM czy SMACSS.
 * W większym projekcie, rozważ zastosowanie preprocesora CSS, który umożliwia rozdzielenie kodu na kilka arkuszy, łączących się w jeden po kompilacji. 
 * Innym rozwiązaniem, jest podział kodu CSS na kilka arkuszy, które są następnie załączane do html, gdy są potrzebne. Takie rozwiązanie jest wygodne, ale zwiększa ilość czasochłonnych requestów http do serwera. 
-* Stale refaktoryzuj kod - poprawiaj jego strukturę, "sprzątaj" po zakończeniu pracy.
+* Stale refaktoryzuj kod - poprawiaj jego strukturę, "sprzątaj" po zakończeniu pracy. Zasada skauta, rozpowszechniana przez Roberta Martina - zostaw klasę czystszą, niż ją zastałeś.
 
-### Niepotrzebne zapobieganie wrapowaniu tekstu
-Przez to wyłazi na innych rozdzielczościach
+### Zostawianie zakomentowanego kodu
+To ogólna uwaga, dotycząca każdego kodu. Jak pisał Robert Martin - zakomentowany kod, osadza się w aplikacji, jak osad w butelce wina. Nie zostawiajmy zakomentowanego kodu, ponieważ wprowadza on niepokój. Nie wiadomo, czy jest on do czegoś potrzebny, i dlaczego został zakomentowany.
 
-### Tworzenie designu pixel perfect z myślą tylko o swoim ekranie.
+### Nie stosowanie konwencji w CSS
+Na konwencję w CSS, sprowadza się:
+
+* zachowanie zawsze takiego samego wcinania wierszy
+* stałe odstępy między takimi samymi elementami kodu
+* odpowiednia kolejność deklaracji w CSS (zwykle najpierw te najważniejsze, jak display czy position, potem mniej ważne)
+
+
+Kod trzymający się konwencji, ułatwia pracę programiście. Dzięki niemu, od razu wiemy, jak działają dane style i nie musimy poświęcać dodatkowej energii, na ich analizę. Powoduje on także mniejsze zamieszanie przy pracy z systemem kontroli wersji (białe znaki są w odpowiednich miejscach).
+
+Aby ułatwić to zadanie, najlepiej jest włączyć automatyczne reformatowanie kodu przy zapisie pliku w edytorze. Ustawienia dotyczące formatowania, warto współdzielić w zespole. Konwencja dotycząca formatowaia może być ustalona przez zespół. Częstym wyborem jest zastosowanie się do jednej z konwencji stosowanych przez duże firmy, a dostępnej w Internecie.
+
 ### Brak myślenia o dynamicznym zachowaniu strony
         * Gdy dodamy więcej treści
         * Gdy zmieni się rozdzielczość strony 
         * inne rozwiązania "ad hoc"
-### Nieprawidłowe wcinanie wierszy
 
-### Niespójne nazewnictwo
-Mieszanie różnych języków
-
-### Zostawianie zakomentowanego kodu
-### Osobne stylowanie elementów w jednej grupie (kilka margin top, zamiast jednego dla wrapa)
-### Stylowanie, gdy markup html jest do poprawy
-
-Przykładowo, w kodzie znajdują się dwa elementy, mające służyć jako linie, oddzielające poszczególne elementy. Mają one mieć taką samą długość.
-```html
-<div class="row">
-    <hr>
-</div>
-
-<!-- drugi element -->
-<div>
-    <hr>
-</div>
-```
-Gdy klasa .row, nadaje elementom dodatkowy margines, padding lub długość, uzyskanie prawidłowej struktury html, będzie wymagało kombinowania. Lepiej jest najpierw naprawić strukturę HTML (o ile można). Ostylowanie tych dwóch elementów, zajmie wtedy znacznie mniej czasu. 
